@@ -30,8 +30,8 @@ class TestBook(unittest.TestCase):
 
     def testWrongFields(self):
         book = Book(title='1984', author='Orwell', writing_year=1948, rating=9)
-        book.set_field('printed_by', 'Alpina Productions')
-        self.assertEqual(book.get_field('printed_by'), 'Alpina Productions')
+        with self.assertRaises(Exception):
+            book.set_field('printed_by', 'Alpina Productions')
 
     def testConvertToDict(self):
         book = Book(title='1984', author='Orwell', writing_year=1948, rating=9)
