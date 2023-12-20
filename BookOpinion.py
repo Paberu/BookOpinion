@@ -53,6 +53,7 @@ class BookOpinion:
                 self.titles.append(book.get_field('title'))
                 json_line = fp.readline()
 
+
 if __name__ == '__main__':
     book_opinion = BookOpinion()
 
@@ -61,6 +62,7 @@ if __name__ == '__main__':
     APP_WIDTH = 1200
     BOOKSHELF_WIDTH = APP_WIDTH // 3
     BOOK_PROPERTIES_WIDTH = APP_WIDTH * 2 // 3
+    LABEL_WIDTH = 100
 
     def save_to_file():
         book_opinion.save_to_file()
@@ -161,13 +163,14 @@ if __name__ == '__main__':
                         tag='bookshelf', show=True)
 
     with dpg.window(label='Информация о книге', tag='book_info', no_close=True, pos=(BOOKSHELF_WIDTH, 0),
-                    width=BOOK_PROPERTIES_WIDTH, height=APP_HEIGHT):
+                        width=BOOK_PROPERTIES_WIDTH, height=APP_HEIGHT):
         title = dpg.add_input_text(tag='book_title', hint='Название книги', width=BOOK_PROPERTIES_WIDTH)
         author = dpg.add_input_text(tag='book_author', hint='Автор', width=BOOK_PROPERTIES_WIDTH)
         writing_year = dpg.add_input_text(tag='book_written', hint='Год написания книги', width=BOOK_PROPERTIES_WIDTH//3)
         publication_year = dpg.add_input_text(tag='book_published', hint='Год издания книги', width=BOOK_PROPERTIES_WIDTH//3)
         rating = dpg.add_slider_int(tag='rating',min_value=0, max_value=10, width=BOOK_PROPERTIES_WIDTH//3)
-        opinion = dpg.add_input_text(tag='book_opinion',default_value='Ваше мнение/обзор',  multiline=True, width=BOOK_PROPERTIES_WIDTH, height=200)
+        dpg.add_text('Напишите Ваше мнение о книге или целый обзор:')
+        opinion = dpg.add_input_text(tag='book_opinion', multiline=True, width=BOOK_PROPERTIES_WIDTH, height=200)
         with dpg.group(horizontal=True):
             dpg.add_button(label='Сохранить книгу', callback=save_book,
                            user_data=[title, author, writing_year, publication_year, rating, opinion])
