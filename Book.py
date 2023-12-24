@@ -1,16 +1,17 @@
 class Book:
 
-    BOOK_FIELDS = ('title', 'author', 'writing_year', 'publication_year', 'rating', 'opinion')
+    BOOK_FIELDS = ('__title', '__author', '__writing_year', '__publication_year', '__rating', '__opinion')
 
     def __init__(self, title, author, writing_year=None, publication_year=None, rating=None, opinion=None):
-        self.title = title
-        self.author = author
-        self.writing_year = writing_year
-        self.publication_year = publication_year
-        self.rating = rating
-        self.opinion = opinion
+        self.__title = title
+        self.__author = author
+        self.__writing_year = writing_year
+        self.__publication_year = publication_year
+        self.__rating = rating
+        self.__opinion = opinion
 
     def get_field(self, field_name):
+        print(self.__dict__)
         return getattr(self, field_name)
 
     def set_field(self, field_name, value):
@@ -20,14 +21,14 @@ class Book:
             raise AttributeError('Нельзя создавать новые поля')
 
     def __str__(self):
-        return self.title
+        return self.__title
 
     def get_values(self):
-        return self.title, self.author, self.writing_year, self.publication_year, self.rating, self.opinion
+        return self.__title, self.__author, self.__writing_year, self.__publication_year, self.__rating, self.__opinion
 
     def convert_to_dict(self):
-        book_dict = {'title': self.title, 'author': self.author, 'writing_year': self.writing_year,
-                     'publication_year': self.publication_year, 'rating': self.rating, 'opinion': self.opinion}
+        book_dict = {'title': self.__title, 'author': self.__author, 'writing_year': self.__writing_year,
+                     'publication_year': self.__publication_year, 'rating': self.__rating, 'opinion': self.__opinion}
         return book_dict
 
     @classmethod
@@ -50,7 +51,7 @@ class Book:
         return False
 
     def check_years(self):
-        if not Book.check_year(self.writing_year):
-            self.writing_year = ''
-        if not Book.check_year(self.publication_year):
-            self.publication_year = ''
+        if not Book.check_year(self.__writing_year):
+            self.__writing_year = ''
+        if not Book.check_year(self.__publication_year):
+            self.__publication_year = ''
