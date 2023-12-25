@@ -8,31 +8,24 @@ from BookOpinion import BookOpinion
 class TestBookOpinion(unittest.TestCase):
 
     def setUp(self):
-        # Инициализация DearPyGui перед каждым тестом
-        dpg.create_context()
-
-    def tearDown(self):
-        # Очистка DearPyGui после каждого теста
-        dpg.destroy_context()
+        self.book_opinion = BookOpinion()
 
     def testCreateBookOpinion(self):
-        book_opinion = BookOpinion()
-        self.assertIsInstance(book_opinion, BookOpinion)
+        self.assertIsInstance(self.book_opinion, BookOpinion)
 
     def testAddBook(self):
-        book_opinion = BookOpinion()
         book = Book(title='1984', author='Orwell', writing_year=1948, rating=9)
-        book_opinion.add_book(book)
-        test_book = book_opinion.get_books()[0]
+        self.book_opinion.add_to_books(book)
+        test_book = self.book_opinion.get_books()[0]
         self.assertIsInstance(test_book, Book)
-        self.assertEqual(test_book.get_field('title'), '1984')
+        self.assertEqual(test_book.get_field('_Book__title'), '1984')
 
-    def testDeleteBook(self):
-        book_opinion = BookOpinion()
+    def testDeleteFromBooks(self):
         book = Book.create_from_dict({'title': '1984', 'author': 'Orwell', 'writing_year': 1948,
                                       'publication_year': None, 'rating': 9, 'opinion': None})
-        book_opinion.add_book(book)
-        book_opinion.delete_book()
+        self.book_opinion.add_to_books(book)
+        self.book_opinion.delete_from_books(book)
+        self.assertEqual(self.book_opinion.get_books(), [])
 
 
 unittest.main()

@@ -1,6 +1,7 @@
 class Book:
 
-    BOOK_FIELDS = ('__title', '__author', '__writing_year', '__publication_year', '__rating', '__opinion')
+    BOOK_FIELDS = ('_Book__title', '_Book__author', '_Book__writing_year',
+                   '_Book__publication_year', '_Book__rating', '_Book__opinion')
 
     def __init__(self, title, author, writing_year=None, publication_year=None, rating=None, opinion=None):
         self.__title = title
@@ -11,14 +12,14 @@ class Book:
         self.__opinion = opinion
 
     def get_field(self, field_name):
-        print(self.__dict__)
+        if field_name not in self.BOOK_FIELDS:
+            raise AttributeError('Нельзя создавать новые поля')
         return getattr(self, field_name)
 
     def set_field(self, field_name, value):
-        if field_name in self.BOOK_FIELDS:
-            setattr(self, field_name, value)
-        else:
+        if field_name not in self.BOOK_FIELDS:
             raise AttributeError('Нельзя создавать новые поля')
+        setattr(self, field_name, value)
 
     def __str__(self):
         return self.__title

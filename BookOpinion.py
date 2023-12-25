@@ -20,8 +20,7 @@ class BookOpinion:
                 self.gui.add_button(label='Сохранить в файл', callback=self.save_to_file)
                 self.gui.add_button(label='Загрузить из файла', callback=self.load_from_file)
             self.gui.add_listbox(items=book_opinion.books, width=BOOKSHELF_WIDTH, num_items=APP_HEIGHT // 30,
-                            callback=self.choose_book,
-                            tag='bookshelf', show=True)
+                                 callback=self.choose_book, tag='bookshelf', show=True)
 
         with self.gui.window(label='Информация о книге', tag='book_info', no_close=True, pos=(BOOKSHELF_WIDTH, 0),
                         width=BOOK_PROPERTIES_WIDTH, height=APP_HEIGHT):
@@ -40,7 +39,7 @@ class BookOpinion:
                 self.gui.add_button(label='Отменить', callback=self.cancel_book_editing,
                                user_data=[title, author, writing_year, publication_year, rating, opinion])
                 self.gui.add_button(label='Удалить', callback=self.delete_book,
-                               user_data=[title, author, writing_year, publication_year, rating, opinion])
+                                    user_data=[title, author, writing_year, publication_year, rating, opinion])
 
     def get_books(self):
         return self.books
@@ -48,11 +47,11 @@ class BookOpinion:
     def get_titles(self):
         return self.titles
 
-    def add_book(self, book):
+    def add_to_books(self, book):
         self.books.append(book)
         self.titles.append(book.get_field('_Book__title'))
 
-    def delete_book(self, book):
+    def delete_from_books(self, book):
         self.books.remove(book)
         self.titles.remove(book.get_field('_Book__title'))
 
@@ -63,7 +62,7 @@ class BookOpinion:
 
     def pop_book_by_title(self, title):
         for book in self.books:
-            if book.get_field('__title') == title:
+            if book.get_field('_Book__title') == title:
                 self.books.remove(book)
                 return book
 
@@ -86,12 +85,12 @@ class BookOpinion:
 
     def create_book_dict_from_user_data(self, user_data):
         book_dict = {
-            '__title': dpg.get_value(user_data[0]),
-            '__author': dpg.get_value(user_data[1]),
-            '__writing_year': dpg.get_value(user_data[2]),
-            '__publication_year': dpg.get_value(user_data[3]),
-            '__rating': dpg.get_value(user_data[4]),
-            '__opinion': dpg.get_value(user_data[5])
+            'title': dpg.get_value(user_data[0]),
+            'author': dpg.get_value(user_data[1]),
+            'writing_year': dpg.get_value(user_data[2]),
+            'publication_year': dpg.get_value(user_data[3]),
+            'rating': dpg.get_value(user_data[4]),
+            'opinion': dpg.get_value(user_data[5])
         }
         return book_dict
 
@@ -125,10 +124,10 @@ class BookOpinion:
     def save_anyway(self, sender, data, user_data):
         new_book = Book.create_from_dict(self.create_book_dict_from_user_data(user_data))
         if sender == 'save_anyway':
-            book_opinion.pop_book_by_title(new_book.get_field('__title'))
+            book_opinion.pop_book_by_title(new_book.get_field('_Book__title'))
             dpg.delete_item('warning')
         new_book.check_years()
-        book_opinion.add_book(new_book)
+        book_opinion.add_to_books(new_book)
         book_opinion.current_book = new_book
         dpg.configure_item('bookshelf', items=book_opinion.books)
 
@@ -144,12 +143,12 @@ class BookOpinion:
 
     def choose_book(self, sender, data):
         chosen_book = book_opinion.current_book = book_opinion.get_book_by_title(data)
-        dpg.configure_item('book_title', default_value=chosen_book.get_field('title'))
-        dpg.configure_item('book_author', default_value=chosen_book.get_field('author'))
-        dpg.configure_item('book_written', default_value=chosen_book.get_field('writing_year'))
-        dpg.configure_item('book_published', default_value=chosen_book.get_field('publication_year'))
-        dpg.configure_item('rating', default_value=chosen_book.get_field('rating'))
-        dpg.configure_item('book_opinion', default_value=chosen_book.get_field('opinion'))
+        dpg.configure_item('book_title', default_value=chosen_book.get_field('_Book__title'))
+        dpg.configure_item('book_author', default_value=chosen_book.get_field('_Book__author'))
+        dpg.configure_item('book_written', default_value=chosen_book.get_field('_Book__writing_year'))
+        dpg.configure_item('book_published', default_value=chosen_book.get_field('_Book__publication_year'))
+        dpg.configure_item('rating', default_value=chosen_book.get_field('_Book__rating'))
+        dpg.configure_item('book_opinion', default_value=chosen_book.get_field('_Book__opinion'))
 
     def cancel_book_editing(self, sender, data, user_data):
         self.create_book(sender, data)

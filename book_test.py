@@ -18,11 +18,12 @@ class TestBook(unittest.TestCase):
 
     def testValidBookConstructor(self):
         book = Book(title='1984', author='Orwell')
-        self.assertEqual(book.get_field('title'), '1984')
+        print(book.__dict__)
+        self.assertEqual(book.get_field('_Book__title'), '1984')
 
     def testValidBookConstructor2(self):
         book = Book(title='1984', author='Orwell', writing_year=1948, rating=9)
-        self.assertEqual(book.get_field('author'), 'Orwell')
+        self.assertEqual(book.get_field('_Book__author'), 'Orwell')
 
     def testGetValues(self):
         book = Book(title='1984', author='Orwell', writing_year=1948, rating=9)
@@ -41,14 +42,13 @@ class TestBook(unittest.TestCase):
     def testCreateFromDict(self):
         book = Book.create_from_dict({'title': '1984', 'author': 'Orwell', 'writing_year': 1948,
                                       'publication_year': None, 'rating': 9, 'opinion': None})
-        self.assertEqual(book.get_values(), ('1984', 'Orwell', 1948, None, 9, None))\
-
+        self.assertEqual(book.get_values(), ('1984', 'Orwell', 1948, None, 9, None))
 
     def testLeaveOpinion(self):
         book = Book.create_from_dict({'title': '1984', 'author': 'Orwell', 'writing_year': 1948,
                                       'publication_year': None, 'rating': 9, 'opinion': None})
         opinion = f'Прекрасная книга, буду советовать всем!'
-        book.set_field('opinion', opinion)
+        book.set_field('_Book__opinion', opinion)
         self.assertEqual(book.convert_to_dict(), {'title': '1984', 'author': 'Orwell', 'writing_year': 1948,
                                                   'publication_year': None, 'rating': 9,
                                                   'opinion': f'Прекрасная книга, буду советовать всем!'})
